@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  username  String   @unique
+  comments  Comment[] // Add this line to establish the relationship
+}
+
+model Comment {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  content   String
+  createdAt DateTime @default(now())
+  author    User     @relation(fields: [authorId], references: [id]) // Add this line to reference the User model
+  authorId  String   @map("_authorId") @db.ObjectId // Add this line to store the related user's ID
+}
+
+Sure, I can explain how the upsert method knows which user it is referring to. The upsert method takes a where option that specifies the condition to find the user that you want to create or update. In your case, you are using the username field as the condition, which is a unique field in the User model. This means that Prisma will look for a user with the username “jklasdlk2” in the database. If it finds one, it will update that user with the data provided in the update option. If it doesn’t find one, it will create a new user with the data provided in the create option.
+
+The upsert method also takes care of connecting the user and the comment via the authorId field, which is a relation scalar field that stores the related user’s ID. When you use the create option to create a new comment for a new user, Prisma will automatically set the authorId field to the ID of the newly created user. When you use the update option to create a new comment for an existing user, Prisma will automatically set the authorId field to the ID of the existing user. This way, Prisma ensures that the relation between the user and the comment is maintained in both cases.
