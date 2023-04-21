@@ -33,7 +33,7 @@ const Home = () => {
 
   const reed = async () => {
     const response = await fetch('/api/hello')
-    const data = await response.json()
+    const data = await response
     console.log(data)
     return data
   }
