@@ -1,10 +1,11 @@
 import { currentUser } from "@clerk/nextjs/app-beta"
+import { NextResponse } from "next/server";
 
 export async function GET() {
   const user = await currentUser();
   if (!user) {
-    return new Response('Hello, world!')
+    return NextResponse.json('not logged in')
   } else {
-    return new Response(`Hello, ${user.firstName}!`)
+    return NextResponse.json('logged in')
   }
 }
